@@ -25,6 +25,8 @@ PRODUCT_MODEL := LG-D855
 PRODUCT_MANUFACTURER := LGE
 PRODUCT_RESTRICT_VENDOR_FILES := false
 
+TARGET_BOOT_ANIMATION_RES := 1080
+
 # Inherit some common AEX stuff.
 $(call inherit-product, vendor/aosp/common.mk)
 
