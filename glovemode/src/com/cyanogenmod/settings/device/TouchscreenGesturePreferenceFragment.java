@@ -16,32 +16,30 @@
 
 package com.cyanogenmod.settings.device;
 
-import android.app.ActionBar;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.SwitchPreference;
 import android.provider.Settings;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v14.preference.PreferenceFragment;
+import android.support.v7.preference.Preference;
+import android.support.v14.preference.SwitchPreference;
 
-public class TouchscreenGestureSettings extends PreferenceActivity {
+public class TouchscreenGesturePreferenceFragment extends PreferenceFragment {
 
     private static final String KEY_AMBIENT_DISPLAY_ENABLE = "ambient_display_enable";
     private static final String KEY_GESTURE_HAND_WAVE = "gesture_hand_wave";
     private static final String KEY_GESTURE_PICK_UP = "gesture_pick_up";
     private static final String KEY_GESTURE_POCKET = "gesture_pocket";
+    private static final String KEY_HAPTIC_FEEDBACK = "touchscreen_gesture_haptic_feedback";
     private static final String KEY_PROXIMITY_WAKE = "proximity_wake_enable";
 
     private SwitchPreference mAmbientDisplayPreference;
     private SwitchPreference mHandwavePreference;
+    private SwitchPreference mHapticFeedback;
     private SwitchPreference mPickupPreference;
     private SwitchPreference mPocketPreference;
     private SwitchPreference mProximityWakePreference;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.gesture_panel);
         boolean dozeEnabled = isDozeEnabled();
         mAmbientDisplayPreference = (SwitchPreference) findPreference(KEY_AMBIENT_DISPLAY_ENABLE);
@@ -56,33 +54,25 @@ public class TouchscreenGestureSettings extends PreferenceActivity {
         mPocketPreference.setEnabled(dozeEnabled);
         mProximityWakePreference = (SwitchPreference) findPreference(KEY_PROXIMITY_WAKE);
         mProximityWakePreference.setOnPreferenceChangeListener(mGesturePrefListener);
-
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        mHapticFeedback = (SwitchPreference) findPreference(KEY_HAPTIC_FEEDBACK);
+        mHapticFeedback.setOnPreferenceChangeListener(mHapticPrefListener);
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
+        mHapticFeedback.setChecked(SettingsUtils.getInt(getContext(), getActivity().
+                getContentResolver(), SettingsUtils.TOUCHSCREEN_GESTURE_HAPTIC_FEEDBACK, 1) != 0);
         getListView().setPadding(0, 0, 0, 0);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return false;
-    }
-
     private boolean enableDoze(boolean enable) {
-        return Settings.Secure.putInt(getContentResolver(),
+        return Settings.Secure.putInt(getActivity().getContentResolver(),
                 Settings.Secure.DOZE_ENABLED, enable ? 1 : 0);
     }
 
     private boolean isDozeEnabled() {
-        return Settings.Secure.getInt(getContentResolver(),
+        return Settings.Secure.getInt(getActivity().getContentResolver(),
                 Settings.Secure.DOZE_ENABLED, 1) != 0;
     }
 
@@ -114,6 +104,21 @@ public class TouchscreenGestureSettings extends PreferenceActivity {
                 }
             }
             return true;
+        }
+    };
+
+    private Preference.OnPreferenceChangeListener mHapticPrefListener =
+        new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            final String key = preference.getKey();
+            if (KEY_HAPTIC_FEEDBACK.equals(key)) {
+                final boolean value = (boolean) newValue;
+                SettingsUtils.putInt(getContext(), getActivity().getContentResolver(),
+                        SettingsUtils.TOUCHSCREEN_GESTURE_HAPTIC_FEEDBACK, value ? 1 : 0);
+                return true;
+            }
+            return false;
         }
     };
 
