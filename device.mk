@@ -27,6 +27,9 @@ PRODUCT_COPY_FILES += \
     device/lge/g3-common/configs/audio/audio_platform_info_qcwcn.xml:system/etc/audio_platform_info.xml \
     device/lge/g3-common/configs/audio/mixer_paths_qcwcn.xml:system/etc/mixer_paths.xml
 
+TARGET_USES_GOOGLE_CAMERA := true
+TARGET_USES_SNAP_CAMERA := true
+
 # NFC
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml

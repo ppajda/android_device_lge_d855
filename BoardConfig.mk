@@ -31,11 +31,6 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/d855/bluetooth
 # Kernel
 TARGET_KERNEL_CONFIG := lineageos_d855_defconfig
 TARGET_REQUIRES_BUMP := true
-KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-4.9/bin
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-eabi-
-
-# Rom Toolchain
-#TARGET_GCC_VERSION_EXP := 5.x-uber
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072

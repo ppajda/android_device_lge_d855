@@ -13,10 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+#
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from potter device
+# Inherit from d851 device
 $(call inherit-product, device/lge/d855/device.mk)
 
-# Device identifier. This must come after all inclusions
+# Set those variables here to overwrite the inherited values.
 PRODUCT_DEVICE := d855
 PRODUCT_NAME := full_d855
+PRODUCT_BRAND := lge
+PRODUCT_MODEL := LG-D855
+PRODUCT_MANUFACTURER := LGE

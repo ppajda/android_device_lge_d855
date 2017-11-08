@@ -166,7 +166,7 @@ Value * VerifyBasebandFn(const char *name, State *state, int argc, Expr *argv[])
 
     for (i = 0; i < argc; i++) {
         baseband_string = Evaluate(state, argv[i]);
-        if (baseband_string < 0) {
+        if (baseband_string < (void *)0) {
             return ErrorAbort(state, "%s() error parsing arguments: %d",
                 name, baseband_string);
         }
