@@ -45,6 +45,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     hostapd_default.conf \
     libwcnss_qmi \
+    libwpa_client \
+    hostapd \
+    wpa_supplicant \
     wcnss_service
 
 # NFC packages
